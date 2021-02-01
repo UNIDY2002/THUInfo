@@ -52,9 +52,11 @@ const LoginUI = (props: LoginProps) => {
 
 	const performLogin = () => {
 		props.login(userId, password, () => {
-			if (currState().auth.status !== LoginStatus.LoggedIn) {
-				setLoginPhase((i) => i + 1);
-			}
+			try {
+				if (currState().auth.status !== LoginStatus.LoggedIn) {
+					setLoginPhase((i) => i + 1);
+				}
+			} catch {}
 		});
 	};
 

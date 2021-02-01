@@ -5,6 +5,8 @@ import {getStr} from "../../utils/i18n";
 import {useColorScheme} from "react-native-appearance";
 import themes from "../../assets/themes/themes";
 
+export const iconSize = 60;
+
 export const HomeIcon = ({
 	title,
 	onPress,

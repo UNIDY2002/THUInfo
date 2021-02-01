@@ -1,6 +1,9 @@
-const mockRNGestureHandlerModule = 'react-native-gesture-handler/dist/src/__mocks__/RNGestureHandlerModule.js'
-jest.mock('react-native-gesture-handler', () => mockRNGestureHandlerModule)
-import mockAsyncStorage from "@react-native-community/async-storage/jest/async-storage-mock";
+const mockRNGestureHandlerModule = "react-native-gesture-handler/dist/src/__mocks__/RNGestureHandlerModule.js";
+jest.mock("react-native-gesture-handler", () => mockRNGestureHandlerModule);
+import mockAsyncStorage from "@react-native-async-storage/async-storage/jest/async-storage-mock";
+
+require("./node_modules/react-native-reanimated/src/reanimated2/jestUtils").setUpTests();
+global.__reanimatedWorkletInit = jest.fn();
 
 global.console = {
 	log: console.log,
@@ -20,17 +23,27 @@ global.console = {
 	debug: console.debug,
 };
 
-jest.mock('react-native-fs', () => ({
+jest.mock("react-native-fs", () => ({
 		DocumentDirectoryPath: "",
 		downloadFile: jest.fn(),
 	}),
 );
 
-jest.mock("react-native-reanimated", () => {
-	const Reanimated = require("react-native-reanimated/mock");
-	Reanimated.default.call = () => {};
-	return Reanimated;
-});
+jest.mock("react-native-reanimated", () => ({
+	...jest.requireActual("react-native-reanimated/mock"),
+	useSharedValue: jest.fn,
+	useAnimatedStyle: jest.fn,
+	withTiming: jest.fn,
+	withSpring: jest.fn,
+	withRepeat: jest.fn,
+	withSequence: jest.fn,
+	useAnimatedProps: jest.fn,
+	Easing: {
+		linear: jest.fn,
+		elastic: jest.fn,
+		inOut: jest.fn,
+	},
+}));
 
 jest.mock("react-native-view-shot", () => ({
 	RNViewShot: jest.fn().mockResolvedValue(),
